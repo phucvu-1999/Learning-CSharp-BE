@@ -52,6 +52,8 @@ namespace CSTiengViet
             var newSquare = new Square();
             newSquare.Subscriber(newHandler);
             newHandler.Input();
+
+            Console.WriteLine("Hello i'm learning C#");
         }
 
     }
