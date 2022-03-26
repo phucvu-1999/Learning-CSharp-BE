@@ -9,13 +9,15 @@ namespace CSTiengViet
   {
         static void Main(string[] args)
         {
-            var newDictionary = new Dictionary<string, string>();
-            newDictionary.Add("name", "Tien Phuc");
-            newDictionary.Add("Age", "23");
-            newDictionary.Add("hobby", "Football");
-            newDictionary.Add("girlfriend", "Thanh Ha");
+            var set1 = new HashSet<int>() { 1, 2, 3, 4, 5, 6, };
+            var set2 = new HashSet<int>() { 4,5,6,7,8,9 };
 
-            Console.WriteLine(newDictionary["hobby"]);
+            set1.UnionWith(set2);
+            foreach(var value in set1)
+            {
+                Console.WriteLine(value);
+            }
+
         }
   }
 }
