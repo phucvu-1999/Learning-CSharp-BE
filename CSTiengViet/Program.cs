@@ -9,18 +9,13 @@ namespace CSTiengViet
   {
         static void Main(string[] args)
         {
-            var newDoublyLinkedList = new LinkedList<int>();
-            var value1 = newDoublyLinkedList.AddFirst(1);
-            var value2 = newDoublyLinkedList.AddLast(2);
+            var newDictionary = new Dictionary<string, string>();
+            newDictionary.Add("name", "Tien Phuc");
+            newDictionary.Add("Age", "23");
+            newDictionary.Add("hobby", "Football");
+            newDictionary.Add("girlfriend", "Thanh Ha");
 
-            var value3 = newDoublyLinkedList.AddAfter(value2, 3);
-            newDoublyLinkedList.AddLast(4);
-            newDoublyLinkedList.AddLast(5);
-
-            var newNode = newDoublyLinkedList.Last.Value;
-            Console.WriteLine(newNode);
-
-            
+            Console.WriteLine(newDictionary["hobby"]);
         }
   }
 }
