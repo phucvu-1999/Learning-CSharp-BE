@@ -7,24 +7,27 @@ namespace CSTiengViet
 {
   internal class Program
   {
-        class Product
-        {
-            public int Id { get; set; }
-            public string Name { get; set; } 
-            public double Price { get; set; }
-            public string Origin { get; set; }
-
-            public Product(int _id, string _name, double _price, string _origin)
-            {
-                Id = _id;
-                Name = _name;
-                Price = _price;
-                Origin = _origin;
-            }
-        }
         static void Main(string[] args)
-        { 
-            var sortList = new SortedList<string, int>() { }
+        {
+            var newQueue = new Queue<int>();
+            newQueue.Enqueue(1);
+            newQueue.Enqueue(2);
+            newQueue.Enqueue(3);
+
+             Console.WriteLine($"The first element of the Queue is: {newQueue.Peek()}");
+
+            try
+            {
+
+            newQueue.Dequeue();
+            newQueue.Dequeue();
+            newQueue.Dequeue();
+            } catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            Console.WriteLine(newQueue.Count);
         }
   }
 }
