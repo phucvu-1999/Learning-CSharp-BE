@@ -9,25 +9,23 @@ namespace CSTiengViet
   {
         static void Main(string[] args)
         {
-            var newQueue = new Queue<int>();
-            newQueue.Enqueue(1);
-            newQueue.Enqueue(2);
-            newQueue.Enqueue(3);
-
-             Console.WriteLine($"The first element of the Queue is: {newQueue.Peek()}");
+           var newStack = new Stack<int>();
+            newStack.Push(1);
+            newStack.Push(2);
+            newStack.Push(3);
 
             try
             {
 
-            newQueue.Dequeue();
-            newQueue.Dequeue();
-            newQueue.Dequeue();
-            } catch (InvalidOperationException ex)
+            newStack.Pop();
+            newStack.Pop();
+            newStack.Pop();
+            } catch(InvalidOperationException e)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(e.Message);
             }
 
-            Console.WriteLine(newQueue.Count);
+            Console.WriteLine(newStack.Count);
         }
   }
 }
