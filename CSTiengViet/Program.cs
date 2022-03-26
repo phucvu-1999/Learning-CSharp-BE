@@ -9,23 +9,18 @@ namespace CSTiengViet
   {
         static void Main(string[] args)
         {
-           var newStack = new Stack<int>();
-            newStack.Push(1);
-            newStack.Push(2);
-            newStack.Push(3);
+            var newDoublyLinkedList = new LinkedList<int>();
+            var value1 = newDoublyLinkedList.AddFirst(1);
+            var value2 = newDoublyLinkedList.AddLast(2);
 
-            try
-            {
+            var value3 = newDoublyLinkedList.AddAfter(value2, 3);
+            newDoublyLinkedList.AddLast(4);
+            newDoublyLinkedList.AddLast(5);
 
-            newStack.Pop();
-            newStack.Pop();
-            newStack.Pop();
-            } catch(InvalidOperationException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            var newNode = newDoublyLinkedList.Last.Value;
+            Console.WriteLine(newNode);
 
-            Console.WriteLine(newStack.Count);
+            
         }
   }
 }
