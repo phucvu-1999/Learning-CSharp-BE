@@ -1,0 +1,1 @@
+﻿Hello this is the file created to learn C# and read file from folder in C#
