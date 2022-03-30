@@ -7,26 +7,57 @@ namespace CSTiengViet
 {
     internal class Program
     {
-        class classA
+        interface IClassB
         {
-            public void Action() => Console.WriteLine("Action A");
+            public void ActionB();
         }
 
-        class classB
+        interface IClassC
         {
-            public void Action()
+            public void ActionC();
+        }
+
+        class C : IClassC
+        {
+            public void ActionC() => Console.WriteLine("Action in class C");
+        }
+
+        class B : IClassB
+        {
+            IClassC c_dependency;
+            public B(IClassC classC)
             {
-                Console.WriteLine("Action B");
-                var aClass = new classA();
-                aClass.Action();
+                c_dependency = classC;
+            }
+            public void ActionB()
+            {
+                Console.WriteLine("Action in class B");
+                c_dependency.ActionC();
+            }
+        }
+        class A
+        {
+            IClassB b_dependency;
+
+            public A(IClassB classB)
+            {
+                b_dependency = classB;
+            }
+
+            public void ActionA()
+            {
+                Console.WriteLine("Action in class A");
+                b_dependency.ActionB();
             }
         }
 
-
         static void Main(string[] args)
         {
-            var bClass = new classB();
-            bClass.Action();
+            IClassC classC = new C();
+            IClassB classB = new B(classC);
+            A classA = new A(classB);
+            classA.ActionA();
+
         }
     }
 }
