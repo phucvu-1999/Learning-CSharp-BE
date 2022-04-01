@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using MyLibrary;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CSTiengViet
 {
@@ -22,6 +23,11 @@ namespace CSTiengViet
             public void ActionC() => Console.WriteLine("Action in class C");
         }
 
+        class C1 : IClassC
+        {
+            public void ActionC() => Console.WriteLine("This is the implement of class C");
+        }
+
         class B : IClassB
         {
             IClassC c_dependency;
@@ -34,6 +40,26 @@ namespace CSTiengViet
                 Console.WriteLine("Action in class B");
                 c_dependency.ActionC();
             }
+        }
+
+        class B1 : IClassB
+        {
+            IClassC c_dependency;
+            string message;
+
+            public B1(IClassC _cDep, string _msg)
+            {
+                message = _msg;
+                c_dependency = _cDep;
+                Console.WriteLine("Action B1 is created!!!");
+            }
+
+            public void ActionB()
+            {
+                Console.WriteLine(message);
+                c_dependency.ActionC();
+            }
+
         }
         class A
         {
@@ -51,13 +77,44 @@ namespace CSTiengViet
             }
         }
 
+        class Horn
+        {
+            public void Beep() => Console.WriteLine("Beep Beep");
+        }
+
+        class Car
+        {
+            public Horn horn { get; set; }
+            public void Beep()
+            {
+                horn.Beep();
+            }
+
+        }
+
+        public static IClassB CreateB1(IServiceProvider provider)
+        {
+            var b1 = new B1(provider.GetService<IClassC>(), "HEllo");
+            return b1;
+        }
+
         static void Main(string[] args)
         {
-            IClassC classC = new C();
-            IClassB classB = new B(classC);
-            A classA = new A(classB);
-            classA.ActionA();
 
+            var services = new ServiceCollection();
+
+            services.AddSingleton<A, A>();
+            services.AddSingleton<IClassB, B1>((provider) =>
+            {
+                var b1 = new B1(provider.GetService<IClassC>(), "This is implemented in class B1");
+                return b1;
+            });
+            services.AddSingleton<IClassC, C>();
+
+            var provider = services.BuildServiceProvider();
+
+            A classA = provider.GetService<A>();
+            classA.ActionA();
         }
     }
 }
