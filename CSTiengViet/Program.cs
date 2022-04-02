@@ -142,39 +142,23 @@ namespace CSTiengViet
 
         static void Main(string[] args)
         {
-            IConfigurationRoot configurationRoot;
-            ConfigurationBuilder configBuilder = new ConfigurationBuilder();
-            configBuilder.SetBasePath(System.IO.Directory.GetCurrentDirectory());
-            configBuilder.AddJsonFile("config.json");
-
-            configurationRoot = configBuilder.Build();
-
-
-            // get service
-            var services = new ServiceCollection();
-
-            // Add Dependencies;
-            services.AddSingleton<MyService>();
-            services.AddSingleton<Dogs>();
-
-            // Add Option to the specific dependency;
-            services.Configure<MyServiceOptions>(
-                (MyServiceOptions options) =>
-                {
-                    options.data1 = "Hello guys";
-                    options.data2 = "Hello girls";
-                }
-                );
-            services.Configure<DogOptions>((options) =>
+            try
             {
-                options.Name = "Pinky";
-                options.Age = 2;
-            });
-            var provider = services.BuildServiceProvider();
-            var myService = provider.GetService<MyService>();
-            var myDog = provider.GetService<Dogs>();
-            myService.PrintData();
-            myDog.PrintInfo();
+
+                IConfigurationRoot configurationRoot;
+                ConfigurationBuilder configBuilder = new ConfigurationBuilder();
+                configBuilder.SetBasePath(System.IO.Directory.GetCurrentDirectory());
+                configBuilder.AddJsonFile("config.json");
+
+                configurationRoot = configBuilder.Build();
+
+                var readValue = configurationRoot.GetSection("section1").GetSection("key1").Value;
+                Console.WriteLine(readValue);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
