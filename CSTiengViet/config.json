@@ -1,0 +1,10 @@
+{
+  "section1": {
+    "key1": "value1",
+    "key2": 22222,
+  },
+  "MySerVice": {
+    "data1": "value2",
+    "data2": 12345
+  }
+}

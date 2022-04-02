@@ -3,6 +3,10 @@ using Newtonsoft.Json;
 using MyLibrary;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Configuration;
 
 namespace CSTiengViet
 {
@@ -92,29 +96,85 @@ namespace CSTiengViet
 
         }
 
-        public static IClassB CreateB1(IServiceProvider provider)
+        public class MyServiceOptions
         {
-            var b1 = new B1(provider.GetService<IClassC>(), "HEllo");
-            return b1;
+            public string data1 { get; set; }
+            public string data2 { get; set; }
+
         }
+
+        public class MyService
+        {
+            public string data1 { get; set; }
+            public string data2 { get; set; }
+
+            public MyService(IOptions<MyServiceOptions> options)
+            {
+                var _options = options.Value;
+                data1 = _options.data1;
+                data2 = _options.data2;
+            }
+
+            public void PrintData() => Console.WriteLine($"{data1} /{data2}");
+
+        }
+
+        public class DogOptions
+        {
+            public string Name { get; set; }
+            public int Age { get; set; }
+        }
+
+        public class Dogs
+        {
+            public string Name { get; set; }
+            public int Age { get; set; }
+
+            public void PrintInfo() => Console.WriteLine($"{Name} are {Age}");
+
+            public Dogs(IOptions<DogOptions> options)
+            {
+                Name = options.Value.Name;
+                Age = options.Value.Age;
+            }
+        }
+
 
         static void Main(string[] args)
         {
+            IConfigurationRoot configurationRoot;
+            ConfigurationBuilder configBuilder = new ConfigurationBuilder();
+            configBuilder.SetBasePath(System.IO.Directory.GetCurrentDirectory());
+            configBuilder.AddJsonFile("config.json");
 
+            configurationRoot = configBuilder.Build();
+
+
+            // get service
             var services = new ServiceCollection();
 
-            services.AddSingleton<A, A>();
-            services.AddSingleton<IClassB, B1>((provider) =>
+            // Add Dependencies;
+            services.AddSingleton<MyService>();
+            services.AddSingleton<Dogs>();
+
+            // Add Option to the specific dependency;
+            services.Configure<MyServiceOptions>(
+                (MyServiceOptions options) =>
+                {
+                    options.data1 = "Hello guys";
+                    options.data2 = "Hello girls";
+                }
+                );
+            services.Configure<DogOptions>((options) =>
             {
-                var b1 = new B1(provider.GetService<IClassC>(), "This is implemented in class B1");
-                return b1;
+                options.Name = "Pinky";
+                options.Age = 2;
             });
-            services.AddSingleton<IClassC, C>();
-
             var provider = services.BuildServiceProvider();
-
-            A classA = provider.GetService<A>();
-            classA.ActionA();
+            var myService = provider.GetService<MyService>();
+            var myDog = provider.GetService<Dogs>();
+            myService.PrintData();
+            myDog.PrintInfo();
         }
     }
 }
